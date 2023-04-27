@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Category, Subcategory
+from .models import Category, Subcategory, Product, ProductImage
 
 # Register your models here.
 
@@ -17,3 +17,16 @@ class CSubcategoryAdmin(admin.ModelAdmin):
     prepopulated_fields = {'slug': ('name',)}
     list_filter = ('category',)
 
+
+class ProductImageInline(admin.TabularInline):
+    model = ProductImage
+    extra = 1
+
+
+@admin.register(Product)
+class ProductAdmin(admin.ModelAdmin):
+    list_display = ('pk', 'title', 'price', 'product_type', 'category')
+    list_display_links = ('pk', 'title')
+    prepopulated_fields = {'slug': ('title',)}
+    list_filter = ('category',)
+    inlines = [ProductImageInline]
